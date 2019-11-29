@@ -6,12 +6,12 @@ exports.getClient = function(host,port){
     return new MongoClient(exports.getServer(host, port));
 };
 
-exports.getServer = function(host,port){
-    return new MongoServer(host,port);
+exports.connect = function(callback){
+    MongoClient.connect(process.env.mongostring || "mongodb://localhost:27017", callback);
 };
 
 exports.newDatabase = function(name,server = null){
-    let serv = server || exports.getServer("localhost",27017);
+    let serv = server || exports.getServer();
     return new Db(name,serv);
 };
 

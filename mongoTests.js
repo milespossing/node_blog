@@ -2,7 +2,14 @@ let mongoTests = require("./db.js");
 var Db = require('mongodb').Db,
     Server = require('mongodb').Server;
 
-let db = new Db('TestDb01', new Server('localhost',27017));
+mongoTests.connect(function(err,client){
+    listDatabases(client);
+    client.close();
 
-var collection1 = db.collection("TestCollection");
+});
 
+async function listDatabases(client){
+    let databasesList = await client.db().admin().listDatabases();
+    console.log("Databases:");
+    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+}
